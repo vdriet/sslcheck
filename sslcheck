@@ -1,0 +1,1 @@
+@reboot pi [ -x /home/pi/sslcheck/sslcheck.sh ] && /home/pi/sslcheck/sslcheck.sh >>/home/pi/logs/sslcheck.log 2>&1
