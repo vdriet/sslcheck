@@ -47,7 +47,6 @@ def gethttpstatus(host, ipaddress):
   """ get HTTP-status from host """
   ret = ''
   try:
-    print(f'Get status for {host} on {ipaddress}')
     headers = {'Host': f'{host}'}
     url = f'https://{ipaddress}'
     req = requests.get(url, headers=headers, verify=False, timeout=6, allow_redirects=False)
@@ -68,7 +67,6 @@ def getcertinfo(host, ipversion='ipv4'):
   socks = socket.socket(sock_type)
   socks.settimeout(5.0)
   with ctx.wrap_socket(socks, server_hostname=host) as soc:
-    print(f'Get cert for {host}')
     try:
       soc.connect((host, 443))
     except IOError:
@@ -87,41 +85,60 @@ def getcertinfo(host, ipversion='ipv4'):
     return ret
 
 
+def gettlsinfo(host, ipversion='ipv4'):
+  """ get TLS information from host """
+  ret = {}
+  if ipversion == 'ipv6':
+    sock_type = socket.AF_INET6
+  else:
+    sock_type = socket.AF_INET
+  for ver in (ssl.TLSVersion.TLSv1_2, ssl.TLSVersion.TLSv1_3):
+    ctx = ssl.create_default_context()
+    ctx.minimum_version = ver
+    ctx.maximum_version = ver
+    socks = socket.socket(sock_type)
+    socks.settimeout(5.0)
+    with ctx.wrap_socket(socks, server_hostname=host) as soc:
+      try:
+        soc.connect((host, 443))
+        ret[ver.name] = True # pylint: disable=no-member
+      except IOError:
+        ret[ver.name] = False # pylint: disable=no-member
+  return ret
+
+
+def getipinfo(host, ipversion='ipv4'):
+  """ get info from host """
+  data = {}
+  ipaddressdata = []
+  ipfound, iplijst = getip(host, ipversion)
+  if ipfound:
+    for ipaddress in iplijst:
+      ipdata = {}
+      ipdata['ip'] = ipaddress
+      if ipversion=='ipv6':
+        ipaddress = f'[{ipaddress}]'
+      response = gethttpstatus(host, ipaddress)
+      ipdata['httpreponse'] = response
+      ipaddressdata.append(ipdata)
+    data['addresses'] = ipaddressdata
+    certinfo = getcertinfo(host, ipversion)
+    data['cert'] = certinfo
+    tlsinfo = gettlsinfo(host, ipversion)
+    data['tls'] = tlsinfo
+  return data
+
+
 def getinfo(host):
   """ get all information from host """
   data = {}
   data['host'] = host
-  ipresponses = []
-  ipv4found, ipv4lijst = getip(host)
-  if ipv4found:
-    for ipaddress in ipv4lijst:
-      ipdata = {}
-      ipdata['ip'] = ipaddress
-      response = gethttpstatus(host, ipaddress)
-      ipdata['HTTP reponse'] = response
-      ipresponses.append(ipdata)
-    certinfo = getcertinfo(host)
-    data['ipv4cert'] = certinfo
-
-  ipv6found, ipv6lijst = getip(host, 'ipv6')
-  if ipv6found:
-    for ipaddress in ipv6lijst:
-      ipdata = {}
-      ipdata['ip'] = ipaddress
-      formattedip = f'[{ipaddress}]'
-      response = gethttpstatus(host, formattedip)
-      ipdata['HTTP reponse'] = response
-      ipresponses.append(ipdata)
-    certinfo = getcertinfo(host, 'ipv6')
-    data['ipv6cert'] = certinfo
+  ipresponses = {}
+  ipresponses['ipv4data'] = getipinfo(host)
+  ipresponses['ipv6data'] = getipinfo(host, 'ipv6')
   data['ipresponses'] = ipresponses
   return data
 
-
-@app.route('/sslcheck', methods=['GET'])
-def sslcheckget():
-  """ get """
-  return 'OK!\n'
 
 @app.route('/sslcheck', methods=['POST'])
 def sslcheckpost():
