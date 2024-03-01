@@ -78,11 +78,11 @@ def getcertinfo(host, ipversion='ipv4'):
     issued_to = subject['commonName']
     issuer = dict(x[0] for x in cert['issuer'])
     issued_by = issuer['commonName']
-    validdate = datetime.strptime(cert['notAfter'], '%b %d %H:%M:%S %Y')
+    validdate = datetime.strptime(cert['notAfter'], '%b %d %H:%M:%S %Y %Z')
 
     ret['CN'] = issued_to
     ret['issuer'] = issued_by
-    ret['validuntil'] = validdate.strftime('%Y-%m-%d %H:%M:%S %Z')
+    ret['validuntil'] = validdate.strftime('%Y-%m-%d %H:%M:%S')
     return ret
 
 
