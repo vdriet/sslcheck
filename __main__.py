@@ -1,5 +1,5 @@
 """ SSL-checker """
-import datetime
+from datetime import datetime
 import socket
 import ssl
 
