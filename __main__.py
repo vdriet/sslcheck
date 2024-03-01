@@ -81,8 +81,8 @@ def getcertinfo(host, ipversion='ipv4'):
     validdate = datetime.strptime(cert['notAfter'], '%b %d %H:%M:%S %Y %Z')
 
     ret['CN'] = issued_to
-    ret['Issuer'] =issued_by
-    ret['ValidUntil'] = validdate
+    ret['Issuer'] = issued_by
+    ret['ValidUntil'] = validdate.strftime('%Y-%m-%d %H:%M:%S %Z')
     return ret
 
 
