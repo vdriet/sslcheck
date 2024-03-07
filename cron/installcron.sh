@@ -1,1 +1,1 @@
-cp sslcheck /etc/cron.d/
+cp -u sslcheck /etc/cron.d/
