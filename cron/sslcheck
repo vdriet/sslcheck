@@ -1,1 +1,1 @@
-@reboot root [ -x /opt/sslcheck/run.sh ] && /opt/sslcheck/run.sh
+@reboot root [ -x /opt/sslcheck/run.sh ] && cd /opt/sslcheck && ./run.sh
