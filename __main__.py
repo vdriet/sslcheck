@@ -1,7 +1,7 @@
 """ SSL-checker """
-from datetime import datetime
 import socket
 import ssl
+from datetime import datetime
 
 import pydig
 import requests
@@ -13,6 +13,7 @@ from waitress import serve
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 app = Flask(__name__)
+
 
 def dodig(host, recordtype):
   """ DIG """
@@ -46,15 +47,13 @@ def getip(host, ipversion='ipv4'):
 
 def gethttpstatus(host, ipaddress):
   """ get HTTP-status from host """
-  ret = ''
   try:
     headers = {'Host': f'{host}'}
     url = f'https://{ipaddress}'
     req = requests.get(url, headers=headers, verify=False, timeout=6, allow_redirects=False)
-    ret = req.status_code
+    return req.status_code
   except requests.ConnectionError:
     return 'failed to connect'
-  return ret
 
 
 def getcertinfo(host, ipversion='ipv4'):
@@ -102,9 +101,9 @@ def gettlsinfo(host, ipversion='ipv4'):
     with ctx.wrap_socket(socks, server_hostname=host) as soc:
       try:
         soc.connect((host, 443))
-        ret[ver.name] = True # pylint: disable=no-member
+        ret[ver.name] = True  # pylint: disable=no-member
       except IOError:
-        ret[ver.name] = False # pylint: disable=no-member
+        ret[ver.name] = False  # pylint: disable=no-member
   return ret
 
 
@@ -115,9 +114,8 @@ def getipinfo(host, ipversion='ipv4'):
   ipfound, iplijst = getip(host, ipversion)
   if ipfound:
     for ipaddress in iplijst:
-      ipdata = {}
-      ipdata['ip'] = ipaddress
-      if ipversion=='ipv6':
+      ipdata = {'ip': ipaddress}
+      if ipversion == 'ipv6':
         ipaddress = f'[{ipaddress}]'
       response = gethttpstatus(host, ipaddress)
       ipdata['httpreponse'] = response
@@ -132,11 +130,8 @@ def getipinfo(host, ipversion='ipv4'):
 
 def getinfo(host):
   """ get all information from host """
-  data = {}
-  data['host'] = host
-  ipresponses = {}
-  ipresponses['ipv4data'] = getipinfo(host)
-  ipresponses['ipv6data'] = getipinfo(host, 'ipv6')
+  data = {'host': host}
+  ipresponses = {'ipv4data': getipinfo(host), 'ipv6data': getipinfo(host, 'ipv6')}
   data['ipresponses'] = ipresponses
   return data
 
@@ -156,6 +151,7 @@ def sslcheckpost():
   if host is None:
     return 'No host given'
   return getinfo(host)
+
 
 if __name__ == '__main__':
   serve(app, host="0.0.0.0", port=8082)
