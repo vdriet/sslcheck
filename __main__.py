@@ -136,6 +136,11 @@ def getinfo(host):
   return data
 
 
+@app.route('/sslcheck', methods=['GET'])
+def sslcheckpost():
+  """ get """
+  return 'OK'
+
 @app.route('/sslcheck', methods=['POST'])
 def sslcheckpost():
   """ post """
