@@ -12,7 +12,7 @@ packaging==24.0
 pluggy==1.5.0
 pydig==0.4.0
 pytest==8.2.1
-requests==2.31.0
+requests==2.32.1
 urllib3==2.2.1
 waitress==3.0.0
 Werkzeug==3.0.3
