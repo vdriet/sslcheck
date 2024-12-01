@@ -14,7 +14,7 @@ pluggy==1.5.0
 pydig==0.4.0
 pytest==8.3.4
 requests==2.32.3
-setuptools==68.2.0
+setuptools==75.6.0
 urllib3==2.2.3
 waitress==3.0.2
 Werkzeug==3.1.3
