@@ -1,1 +1,1 @@
-. ./bin/activate
+. ./sslcheck_venv/bin/activate
