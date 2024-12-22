@@ -1,4 +1,4 @@
-""" testen voor de slackbot datumfuncties """
+""" testen voor de sslchecker """
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -64,3 +64,34 @@ class TestDig(unittest.TestCase):
     resultaat = sslcheck.gethttpstatus('www.vanderiethattem.nl', '1.2.3.4')
     assert resultaat == verwachting
     assert mock_requestsget.called
+
+  def test_getcertinfo(self):
+    resultaat = sslcheck.getcertinfo('vanderiethattem.nl')
+    assert resultaat.get('CN') == 'vanderiethattem.nl'
+    assert resultaat.get('issuer', None) is not None
+    assert resultaat.get('CN', None) is not None
+
+  def test_getcertinfo_error(self):
+    verwachting = {'error': 'Error getting cert'}
+    resultaat = sslcheck.getcertinfo('www.domeinzondercertificaat.nl')
+    assert verwachting == resultaat
+
+  def test_getcertinfo_error_ipv6(self):
+    verwachting = {'error': 'Error getting cert'}
+    resultaat = sslcheck.getcertinfo('www.domeinzondercertificaat.nl', 'ipv6')
+    assert verwachting == resultaat
+
+  def test_gettlsinfo(self):
+    verwachting = {'TLSv1_2': True, 'TLSv1_3': True}
+    resultaat = sslcheck.gettlsinfo('www.ncsc.nl')
+    assert resultaat == verwachting
+
+  def test_gettlsinfo_ipv6(self):
+    verwachting = {'TLSv1_2': True, 'TLSv1_3': True}
+    resultaat = sslcheck.gettlsinfo('www.ncsc.nl', 'ipv6')
+    assert resultaat == verwachting
+
+  def test_gettlsinfo_error(self):
+    verwachting = {'TLSv1_2': False, 'TLSv1_3': False}
+    resultaat = sslcheck.gettlsinfo('www.domeinzondercertificaat.nl')
+    assert resultaat == verwachting
