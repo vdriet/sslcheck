@@ -140,6 +140,7 @@ def sslcheckget():
   """ get """
   return 'OK'
 
+
 @app.route('/sslcheck', methods=['POST'])
 def sslcheckpost():
   """ post """
@@ -157,5 +158,5 @@ def sslcheckpost():
   return getinfo(host)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
   serve(app, host="0.0.0.0", port=8082)

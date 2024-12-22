@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 from flask import Flask
 
@@ -27,15 +29,31 @@ def client(app):
   return app.test_client()
 
 
-@pytest.fixture()
-def runner(app):
-  return app.test_cli_runner()
-
-
 def test_sslcheck_get(client):
-  response = client.get("/sslcheck")
+  response = client.get('/sslcheck')
   assert b"OK" in response.data
 
-def test_sslcheck_post(client):
-  response = client.post("/sslcheck")
+
+def test_sslcheck_post_empty(client):
+  response = client.post('/sslcheck')
   assert b"Invalid apikey" in response.data
+
+
+def test_sslcheck_post_wrongkey(client):
+  response = client.post('/sslcheck',
+                         headers={'Apikey': 'somekey'})
+  assert b"Invalid apikey" in response.data
+
+
+def test_sslcheck_post_onlykey(client):
+  response = client.post('/sslcheck',
+                         headers={'Apikey': 'MySecret'})
+  assert b"No host given" in response.data
+
+
+@patch('sslcheck.getinfo', side_effect=None)
+def test_sslcheck_post(mock_info, client):
+  client.post('/sslcheck',
+                         headers={'Apikey': 'MySecret'
+                           , 'Hostname': 'example.com'})
+  assert mock_info.called
