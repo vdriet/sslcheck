@@ -33,14 +33,14 @@ def getip(host, ipversion='ipv4'):
   """ get IP address from host """
   if ipversion == 'ipv4':
     hostlist = getip4(host)
-    return hostlist, hostlist
+    return True, hostlist
   if ipversion == 'ipv6':
     hostlist = getip6(host)
     ret = []
     for ipaddress in hostlist:
       if '.' not in ipaddress:
         ret.append(ipaddress)
-    return ret, ret
+    return True, ret
   return False, []
 
 
