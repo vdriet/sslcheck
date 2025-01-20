@@ -1,10 +1,14 @@
 """ testen voor de sslchecker """
+import os
 import unittest
 from unittest.mock import patch, MagicMock
 
 import requests
+from pytest import mark
 
 import sslcheck
+
+IN_GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS") == "true"
 
 
 class TestDig(unittest.TestCase):
@@ -86,6 +90,7 @@ class TestDig(unittest.TestCase):
     resultaat = sslcheck.gettlsinfo('www.ncsc.nl')
     assert resultaat == verwachting
 
+  @mark.skipif(IN_GITHUB_ACTIONS, reason="Test doesn't work in Github Actions.")
   def test_gettlsinfo_ipv6(self):
     verwachting = {'TLSv1_2': True, 'TLSv1_3': True}
     resultaat = sslcheck.gettlsinfo('www.ncsc.nl', 'ipv6')
