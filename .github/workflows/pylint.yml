@@ -26,8 +26,8 @@ jobs:
           coverage run --data-file tests/.coverage -m pytest -s
           coverage json --data-file tests/.coverage -o buf/tests/coverage.json
           coverage report --data-file tests/.coverage
-      - name: Get Cover
-        uses: orgoro/coverage@v3.2
-        with:
-          coverageFile: tests/.coverage
-          token: ${{ secrets.GIST_TOKEN }}
+#      - name: Get Coverage
+#        uses: orgoro/coverage@v3.2
+#        with:
+#          coverageFile: tests/.coverage
+#          token: ${{ secrets.GIST_TOKEN }}
