@@ -1,6 +1,6 @@
 name: Pylint & Coverage
 
-on: [ push ]
+on: [ push, pull_request ]
 
 jobs:
   build:
