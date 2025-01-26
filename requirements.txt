@@ -1,6 +1,6 @@
 coverage==7.6.10
 Flask==3.1.0
-pip==24.3.1
+pip==25.0
 pydig==0.4.0
 pylint==3.3.3
 pytest==8.3.4
