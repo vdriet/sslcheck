@@ -2,7 +2,7 @@ coverage==7.6.10
 Flask==3.1.0
 pip==25.0
 pydig==0.4.0
-pylint==3.3.3
+pylint==3.3.4
 pytest==8.3.4
 requests==2.32.3
 urllib3==2.3.0
