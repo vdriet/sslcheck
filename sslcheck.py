@@ -5,11 +5,8 @@ from datetime import datetime
 
 import pydig
 import requests
-import urllib3
 from flask import Flask, request
 from waitress import serve
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 app = Flask(__name__)
 
