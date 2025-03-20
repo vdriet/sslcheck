@@ -18,7 +18,7 @@ pip==25.0.1
 platformdirs==4.3.7
 pluggy==1.5.0
 pydig==0.4.0
-pylint==3.3.5
+pylint==3.3.6
 pytest==8.3.5
 requests==2.32.3
 tomlkit==0.13.2
