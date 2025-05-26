@@ -27,13 +27,13 @@ class TestDig(unittest.TestCase):
     mock_requestsget.return_value = mock_requestsget_response
 
     verwachting = {'host': 'www.vanderiethattem.nl',
-                   'ipresponses': {'ipv4data': {'addresses': [{'httpreponse': 200,
+                   'ipresponses': {'ipv4data': {'addresses': [{'httpreponse': '200',
                                                                'ip': '1.2.3.4'}],
                                                 'cert': {'CN': 'vanderiethattem.nl',
                                                          'issuer': 'CA',
                                                          'validuntil': '2024-12-29 10:11:12'},
                                                 'tls': {'TLSv1_2': False, 'TLSv1_3': True}},
-                                   'ipv6data': {'addresses': [{'httpreponse': 200,
+                                   'ipv6data': {'addresses': [{'httpreponse': '200',
                                                                'ip': '1:2::3:0'}],
                                                 'cert': {'CN': 'vanderiethattem.nl',
                                                          'issuer': 'CA',
@@ -57,7 +57,7 @@ class TestDig(unittest.TestCase):
     mock_requestsget_response.get.return_value = mock_requestsget_response
     mock_requestsget.return_value = mock_requestsget_response
 
-    verwachting = 200
+    verwachting = '200'
     resultaat = sslcheck.gethttpstatus('www.vanderiethattem.nl', '1.2.3.4')
     assert verwachting == resultaat
     assert mock_requestsget.called
