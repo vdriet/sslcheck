@@ -21,7 +21,7 @@ pydig==0.4.0
 pylint==3.3.7
 pytest==8.3.5
 requests==2.32.3
-setuptools==80.8.0
+setuptools==80.9.0
 tomlkit==0.13.2
 urllib3==2.4.0
 waitress==3.0.2
