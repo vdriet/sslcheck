@@ -22,7 +22,7 @@ pylint==3.3.7
 pytest==8.4.0
 requests==2.32.3
 setuptools==80.9.0
-tomlkit==0.13.2
+tomlkit==0.13.3
 urllib3==2.4.0
 waitress==3.0.2
 Werkzeug==3.1.3
