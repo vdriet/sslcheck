@@ -5,6 +5,7 @@ charset-normalizer==3.4.3
 click==8.3.0
 coverage==7.10.7
 dill==0.4.0
+dotenv==0.9.9
 Flask==3.1.2
 idna==3.10
 iniconfig==2.1.0
@@ -18,8 +19,10 @@ pip==25.2
 platformdirs==4.4.0
 pluggy==1.6.0
 pydig==0.4.0
+Pygments==2.19.2
 pylint==3.3.8
 pytest==8.4.2
+python-dotenv==1.1.1
 requests==2.32.5
 setuptools==80.9.0
 tomlkit==0.13.3

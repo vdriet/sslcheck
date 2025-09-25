@@ -1,4 +1,5 @@
 """ SSL-checker """
+import os
 import socket
 import ssl
 from datetime import datetime
@@ -7,10 +8,14 @@ from typing import Any
 import pydig
 import requests
 from flask import Flask, request
+from dotenv import load_dotenv
+
 from waitress import serve
 
 app = Flask(__name__)
+load_dotenv()
 
+secretapikey = os.getenv('SECRETAPIKEY', default='MySecret')
 
 def dodig(host: str, recordtype: str) -> list[str]:
   """
@@ -325,7 +330,7 @@ Returns either:
       apikey = header[1]
     if header[0] == 'Hostname':
       host = header[1]
-  if apikey is None or apikey != 'MySecret':
+  if apikey is None or apikey != secretapikey:
     return 'Invalid apikey'
   if host is None:
     return 'No host given'
