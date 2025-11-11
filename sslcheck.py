@@ -17,6 +17,7 @@ load_dotenv()
 
 secretapikey = os.getenv('SECRETAPIKEY', default='MySecret')
 
+
 def dodig(host: str, recordtype: str) -> list[str]:
   """
   Executes a DNS query for a specified host and record type and returns the DNS
@@ -306,6 +307,30 @@ Returns:
     str: This function always returns the string 'OK', indicating the service runs.
 """
   return 'OK'
+
+
+@app.route('/sslcheck/dig/<host>', methods=['GET'])
+def sslcheckdigget(host: str) -> str:
+  """
+  Handles GET requests to the '/sslcheck/dig' endpoint.
+
+  This function is a simple handler for SSL check. It responds to a GET request
+  to get dig informatie for a URL.
+
+  Returns:
+      str: This function returns dig information.
+  """
+  arecord = dodig(host, "A")
+  aaaarecord = dodig(host, "AAAA")
+  txtrecord = dodig(host, "TXT")
+  caarecord = dodig(host, "CAA")
+  mxrecord = dodig(host, "MX")
+  nsrecord = dodig(host, "NS")
+  soarecord = dodig(host, "SOA")
+  return (f'A: {arecord}<br/>AAAA: {aaaarecord}<br/>'
+          f'TXT: {txtrecord}<br/>CAA: {caarecord}<br/>'
+          f'MX: {mxrecord}<br/>NS: {nsrecord}<br/>'
+          f'SOA: {soarecord}')
 
 
 @app.route('/sslcheck', methods=['POST'])
