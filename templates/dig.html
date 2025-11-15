@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="nl"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://vanderiethattem.nl/css/w3.css">
+    <meta charset="UTF-8">
+    <meta content="Resultaat van dig." lang="nl-NL" name="description">
+    <meta property="og:image" content="https://vanderiethattem.nl/img/hattemlogo.png"/>
+    <meta property="og:title" content="Resultaat"/>
+    <title>DIG</title>
+</head>
+<body>
+<div class="w3-container w3-blue w3-margin">
+    <h1>Host: {{ host }}</h1>
+</div>
+<div class="w3-container w3-margin-left">
+    <div class="w3-responsive">
+      <table class="w3-table w3-striped">
+        <tr>
+          <th>Type</th>
+          <th>Values</th>
+        </tr>
+        {% for rec in resultaat %}
+        <tr>
+          <td class="w3-align-top">{{ rec }}</td><td>
+          {% for res in resultaat[rec] %}
+            {{ res }}<br/>
+          {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+</div>
+</body>
+</html>
