@@ -320,17 +320,29 @@ def sslcheckdigget(host: str) -> str:
   Returns:
       str: This function returns dig information.
   """
-  arecord = dodig(host, "A")
-  aaaarecord = dodig(host, "AAAA")
-  txtrecord = dodig(host, "TXT")
-  caarecord = dodig(host, "CAA")
-  mxrecord = dodig(host, "MX")
-  nsrecord = dodig(host, "NS")
-  soarecord = dodig(host, "SOA")
-  return (f'A: {arecord}<br/>AAAA: {aaaarecord}<br/>'
-          f'TXT: {txtrecord}<br/>CAA: {caarecord}<br/>'
-          f'MX: {mxrecord}<br/>NS: {nsrecord}<br/>'
-          f'SOA: {soarecord}')
+  types = ["A",
+           "AAAA",
+           "CAA",
+           "CNAME",
+           "DNSKEY",
+           "DS",
+           "MX",
+           "NS",
+           "PTR",
+           "SOA",
+           "TXT",]
+  records = {}
+  ret = f'Host: {host}'
+  for rectype in types:
+    values = []
+    try:
+      values = dodig(host, rectype)
+    except:
+      print(rectype)
+    if len(values) > 0:
+      records[rectype] = values
+      ret = f'{ret}<br/>{rectype}: {values}<br/>'
+  return ret
 
 
 @app.route('/sslcheck', methods=['POST'])
