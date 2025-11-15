@@ -320,17 +320,7 @@ def sslcheckdigget(host: str) -> str:
   Returns:
       str: This function returns dig information.
   """
-  types = ["A",
-           "AAAA",
-           "CAA",
-           "CNAME",
-           "DNSKEY",
-           "DS",
-           "MX",
-           "NS",
-           "PTR",
-           "SOA",
-           "TXT", ]
+  types = ["A", "AAAA", "CAA", "CNAME", "DNSKEY", "DS", "MX", "NS", "PTR", "SOA", "TXT", ]
   records = {}
   for rectype in types:
     values = dodig(host, rectype)

@@ -8,7 +8,7 @@ import sslcheck
 
 @pytest.fixture()
 def app():
-  app = Flask(__name__)
+  app = Flask(__name__, template_folder='../templates')
   app.config.update({
     "TESTING": True,
   })
@@ -20,6 +20,10 @@ def app():
   @app.route('/sslcheck', methods=['POST'])
   def sslcheckpost():
     return sslcheck.sslcheckpost()
+
+  @app.route('/sslcheck/dig/<host>', methods=['GET'])
+  def sslcheckdigget(host: str):
+    return sslcheck.sslcheckdigget(host)
 
   yield app
 
@@ -54,6 +58,16 @@ def test_sslcheck_post_onlykey(client):
 @patch('sslcheck.getinfo', side_effect=None)
 def test_sslcheck_post(mock_info, client):
   client.post('/sslcheck',
-                         headers={'Apikey': 'MySecret'
-                           , 'Hostname': 'example.com'})
+              headers={'Apikey': 'MySecret'
+                , 'Hostname': 'example.com'})
   assert mock_info.called
+
+
+@patch('pydig.query', side_effect=[['12.34.56.78'],
+                                   [], [], [], [], [], [], [], [], [], [], ])
+def test_sslcheckdig_get(mock_query, client):
+  response = client.get(f'/sslcheck/dig/test.nl')
+  assert b"Host: test.nl" in response.data
+  assert b"<td class=\"w3-align-top\">A</td>" in response.data
+  assert b"12.34.56.78<br/>" in response.data
+  assert mock_query.call_count == 11
