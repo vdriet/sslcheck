@@ -7,7 +7,7 @@ from typing import Any
 
 import pydig
 import requests
-from flask import Flask, request
+from flask import Flask, request, render_template
 from dotenv import load_dotenv
 
 from waitress import serve
@@ -330,19 +330,15 @@ def sslcheckdigget(host: str) -> str:
            "NS",
            "PTR",
            "SOA",
-           "TXT",]
+           "TXT", ]
   records = {}
-  ret = f'Host: {host}'
   for rectype in types:
-    values = []
-    try:
-      values = dodig(host, rectype)
-    except:
-      print(rectype)
+    values = dodig(host, rectype)
     if len(values) > 0:
       records[rectype] = values
-      ret = f'{ret}<br/>{rectype}: {values}<br/>'
-  return ret
+  return render_template('dig.html',
+                         host=host,
+                         resultaat=records)
 
 
 @app.route('/sslcheck', methods=['POST'])
