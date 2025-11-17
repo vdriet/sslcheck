@@ -25,6 +25,10 @@ def app():
   def sslcheckdigget(host: str):
     return sslcheck.sslcheckdigget(host)
 
+  @app.route('/sslcheck/digall/<host>', methods=['GET'])
+  def sslcheckdigallget(host: str):
+    return sslcheck.sslcheckdigallget(host)
+
   yield app
 
 
@@ -71,3 +75,25 @@ def test_sslcheckdig_get(mock_query, client):
   assert b"<td class=\"w3-align-top\">A</td>" in response.data
   assert b"12.34.56.78<br/>" in response.data
   assert mock_query.call_count == 11
+
+
+@patch('pydig.Resolver.query', side_effect=[
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+  ['12.34.56.78'], [], [], [], [], [], [], [], [], [], [],
+])
+def test_sslcheckdigall_get(mock_query, client):
+  response = client.get(f'/sslcheck/digall/test.nl')
+  assert b"Host: test.nl" in response.data
+  assert b"<td class=\"w3-align-top\">A</td>" in response.data
+  assert b"12.34.56.78<br/>" in response.data
+  assert mock_query.call_count == 11 * 12
