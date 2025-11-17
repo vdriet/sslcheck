@@ -38,6 +38,29 @@ def dodig(host: str, recordtype: str) -> list[str]:
   return pydig.query(host, recordtype)
 
 
+def dodigresolver(host: str, recordtype: str, resolver: str) -> list[str]:
+  """
+  Executes a DNS query for a specified host and record type and returns the DNS
+  query result from the supplied resolver.
+
+  This function enables querying DNS records based on a given host and record
+  type, facilitating DNS resolution and record retrieval. It leverages the
+  pydig library to perform the query.
+
+  Args:
+      host (str): The hostname or domain to query.
+      recordtype (str): The type of DNS record to query, such as 'A', 'MX', 'TXT', etc.
+      resolver (str): The IP-address from the DNS-resolver.
+
+  Returns:
+      list[str]: A list of DNS query results related to the specified host and record type.
+  """
+  resolver = pydig.Resolver(
+    nameservers=[resolver],
+  )
+  return resolver.query(host, recordtype)
+
+
 def getip4(host: str) -> list[str]:
   """
   Resolves and retrieves the IPv4 address for a given host.
@@ -314,8 +337,8 @@ def sslcheckdigget(host: str) -> str:
   """
   Handles GET requests to the '/sslcheck/dig' endpoint.
 
-  This function is a simple handler for SSL check. It responds to a GET request
-  to get dig informatie for a URL.
+  This function is a simple dig for a host. It responds to a GET request
+  to get dig informatie for a host.
 
   Returns:
       str: This function returns dig information.
@@ -329,6 +352,33 @@ def sslcheckdigget(host: str) -> str:
   return render_template('dig.html',
                          host=host,
                          resultaat=records)
+
+
+@app.route('/sslcheck/digall/<host>', methods=['GET'])
+def sslcheckdigallget(host: str) -> str:
+  """
+  Handles GET requests to the '/sslcheck/digall' endpoint.
+
+  This function is a simple dig for a host. It responds to a GET request
+  to get dig informatie for a host for multiple DNS-resolvers.
+
+  Returns:
+      str: This function returns dig information.
+  """
+  types = ["A", "AAAA", "CAA", "CNAME", "DNSKEY", "DS", "MX", "NS", "PTR", "SOA", "TXT", ]
+  resolvers = ["1.1.1.1", "144.217.51.168", "165.87.13.129", "168.95.1.1", "208.67.222.222", "64.6.64.6", "77.88.8.8",
+               "8.26.56.26", "8.8.8.8", "9.9.9.10", "9.9.9.9", "94.140.14.14", ]
+  results = {}
+  for resolver in resolvers:
+    records = {}
+    for rectype in types:
+      values = dodigresolver(host, rectype, resolver)
+      if len(values) > 0:
+        records[rectype] = values
+    results[resolver] = records
+  return render_template('digall.html',
+                         host=host,
+                         resultaat=results)
 
 
 @app.route('/sslcheck', methods=['POST'])
