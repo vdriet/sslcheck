@@ -16,7 +16,7 @@ MarkupSafe==3.0.3
 mccabe==0.7.0
 packaging==26.0
 pip==26.0.1
-platformdirs==4.8.0
+platformdirs==4.9.1
 pluggy==1.6.0
 pydig==0.4.0
 Pygments==2.19.2
