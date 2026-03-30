@@ -23,7 +23,7 @@ Pygments==2.20.0
 pylint==4.0.5
 pytest==9.0.2
 python-dotenv==1.2.2
-requests==2.33.0
+requests==2.33.1
 setuptools==82.0.1
 tomlkit==0.14.0
 urllib3==2.6.3
