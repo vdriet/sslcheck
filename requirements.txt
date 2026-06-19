@@ -21,7 +21,7 @@ pluggy==1.6.0
 pydig==0.4.0
 Pygments==2.20.0
 pylint==4.0.6
-pytest==9.1.0
+pytest==9.1.1
 python-dotenv==1.2.2
 requests==2.34.2
 setuptools==82.0.1
