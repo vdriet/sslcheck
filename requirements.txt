@@ -22,7 +22,7 @@ pydig==0.4.0
 Pygments==2.20.0
 pylint==4.0.7
 pytest==9.1.1
-python-dotenv==1.2.2
+python-dotenv==1.2.3
 requests==2.34.2
 setuptools==84.0.0
 tomlkit==0.15.1
